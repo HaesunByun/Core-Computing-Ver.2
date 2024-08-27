@@ -98,7 +98,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'CC_chapter1';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Chapter 2. 제어문과 복합자료형" href="CC_chapter2.html" />
+    <link rel="next" title="Chapter 2. 복합자료형과 제어문" href="CC_chapter2.html" />
     <link rel="prev" title="Chapter 0. 프로그래밍 언어와 파이썬" href="CC_chapter0.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -194,7 +194,22 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter0.html">Chapter 0. 프로그래밍 언어와 파이썬</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 1. 기본자료형과 입출력</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CC_chapter2.html">Chapter 2. 제어문과 복합자료형</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CC_chapter2.html">Chapter 2. 복합자료형과 제어문</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter3.html">Chapter 3. 모듈과 함수</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter4.html">Chapter 4. 재귀</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter5.html">Chapter 5. 클래스와 객체</a></li>
@@ -207,6 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter12.html">Chapter 12. 그래프</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter13.html">Chapter 13. 가중치 그래프</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter14.html">Chapter 14. 알고리즘 설계기법</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CC_chapter15.html">기말평가</a></li>
 </ul>
 
     </div>
@@ -453,19 +469,15 @@ document.write(`
 <ul class="simple">
 <li><p>학습목표</p>
 <ul>
-<li><p>기본자료형을 알아보자.</p></li>
-<li><p>산술연산자, 복합연산자를 이용하여 수식을 표현해보자.</p></li>
-<li><p>문자열 데이터의 특징과 인덱싱, 슬라이싱을 알아보자.</p></li>
-<li><p>숫자, 문자 데이터를 변수에 저장해보자.</p></li>
-<li><p>결과를 표준출력장치인 화면에 출력하는 print() 함수에 대해서  알아보자.</p></li>
-<li><p>표준입력장치인 키보드로부터 데이터를 입력받는 input() 함수에 대해서 알아보자.</p></li>
+<li><p>기본자료형, 연산자, 변수를 빠르게 훑어본다.</p></li>
+<li><p>입력과 출력을 빠르게 훑어본다.</p></li>
+<li><p><strong>문자열로 표현된 표현식을 읽어 들여 파이썬 데이터 타입으로 반환하는 함수인 ast 모듈의 literal_eval()과 eava()함수를 익혀보자.</strong></p></li>
 </ul>
 </li>
 <li><p>기대효과</p>
 <ul>
-<li><p>파이썬으로 산술연산을 위한 표현식을 작성할 수 있다.</p></li>
-<li><p>정수, 실수, 문자열 자료 저장을 위한 변수의 개념을 이해할 수 있다.</p></li>
-<li><p>코드를 통해 데이터를 입출력할 수 있다.</p></li>
+<li><p>파이썬으로 기본자료형을 익히고, 연산자, 변수를 활용하여 입출력을 할 수 있다.</p></li>
+<li><p>문자열로 표현된 표현식을 파이썬 자료형으로 변환할 수 있다.</p></li>
 </ul>
 </li>
 </ul>
@@ -1053,10 +1065,7 @@ str(42) 등과 같이 작성하면 기존에 정의된 기능이 동작하지 �
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10 20
 </pre></div>
 </div>
 </div>
@@ -1460,7 +1469,7 @@ You are 20 years old.
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a^b^c
 a b c
 a b c
-b a c
+c a b
 a b
 </pre></div>
 </div>
@@ -1736,7 +1745,7 @@ Welcome!!
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Chapter 2. 제어문과 복합자료형</p>
+        <p class="prev-next-title">Chapter 2. 복합자료형과 제어문</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
