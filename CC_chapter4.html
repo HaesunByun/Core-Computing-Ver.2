@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chapter 4. 재귀 &#8212; Core Computing_Thinking with Computers</title>
+    <title>Chapter 4. 재귀함수 &#8212; Core Computing_Thinking with Computers</title>
   
   
   
@@ -93,6 +93,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'CC_chapter4';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -192,9 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter0.html">Chapter 0. 프로그래밍 언어와 파이썬</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter1.html">Chapter 1. 기본자료형과 입출력</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CC_chapter2.html">Chapter 2. 제어문과 복합자료형</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CC_chapter2.html">Chapter 2. 복합자료형과 제어문</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter3.html">Chapter 3. 모듈과 함수</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 4. 재귀</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 4. 재귀함수</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter5.html">Chapter 5. 클래스와 객체</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter6.html">Chapter 6. 자료구조와 추상화</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter7.html">Chapter 7. 파일입출력과 예외처리</a></li>
@@ -205,6 +207,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter12.html">Chapter 12. 그래프</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter13.html">Chapter 13. 가중치 그래프</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CC_chapter14.html">Chapter 14. 알고리즘 설계기법</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CC_chapter15.html">기말평가</a></li>
 </ul>
 
     </div>
@@ -377,7 +380,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -388,11 +393,31 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Chapter 4. 재귀</h1>
+    <h1>Chapter 4. 재귀함수</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">재귀함수 정의와 호출</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem: 구구단</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#good-factorial">Good예) 팩토리얼(Factorial)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#good">Good예) 재귀적으로 리스트의 합 구하기</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spiral">spiral() 재귀함수 만들기</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Good예) 재귀적으로 문자열 카운트</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bad">Bad예) 피보나치 수열</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vs">반복 VS. 재귀 피보나치 수열 계산량 비교</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">마무리</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -403,12 +428,593 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <div class="tex2jax_ignore mathjax_ignore section" id="chapter-4">
-<h1>Chapter 4. 재귀<a class="headerlink" href="#chapter-4" title="Permalink to this headline">#</a></h1>
+<h1>Chapter 4. 재귀함수<a class="headerlink" href="#chapter-4" title="Permalink to this headline">#</a></h1>
 <div class="info admonition">
 <p class="admonition-title">학습목표와 기대효과</p>
 <ul class="simple">
-<li><p>학습목표</p></li>
-<li><p>기대효과</p></li>
+<li><p>학습목표</p>
+<ul>
+<li><p>재귀함수의 정의와 개념을 이해하자.</p></li>
+<li><p>반복문을 사용하는 것과 재귀함수를 사용하는 것의 차이와 장단점을 이해해보자.</p></li>
+</ul>
+</li>
+<li><p>기대효과</p>
+<ul>
+<li><p>문제를 해결하기 위한 알고리즘을 단순화시키는 방법을 익힐 수 있다.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>컴퓨터가 동작하는 것처럼 우리의 사고를 Computational하게 생각한다는 것은 쉬운 일은 아니다.
+우리는 지금까지 어떤 문제를 해결하기 위해 순차적, 조건적, 반복적으로 생각하는 연습을 여러 주에 걸쳐서 했다. 아직 익숙하지 않더라도 실망하지 말자. 익숙하게 승화시키기 까지는 꽤 시간이 필요하다. 그럼에도 Computational하게 생각하는 것은 매우 중요한 일이기에 포기하지말고 연습하기 바란다.</p>
+<p>오늘 배울 주제는 재귀적(recursive)으로 생각하기이다.</p>
+<p>재귀적으로 생각한다는 것은 무엇일까? 재귀란 ‘원래의 자리로 되돌아온다’는 뜻이다. 재귀적으로 생각하면 반복문을 사용하지 않아도 반복문과 동일한 효과를 낼 수 있다. 이 장에서는 <strong>재귀함수를 통해 생각의 전환으로 문제를 해결</strong>하는 또다른 방법을 익혀보자.</p>
+<div class="section" id="id1">
+<h2>재귀함수 정의와 호출<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><strong>재귀함수</strong>란 함수에서 자기 자신을 다시 호출하는 함수를 말한다. 즉, 함수를 정의할 때 자기 자신을 재참조하는 함수이다.</p></li>
+</ul>
+<ul class="simple">
+<li><p>아래의 코드는 반복문을 사용하여 ‘반갑습니다.’를 5번 출력하는 코드이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">:반갑습니다.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1:반갑습니다.
+2:반갑습니다.
+3:반갑습니다.
+4:반갑습니다.
+5:반갑습니다.
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>‘반갑습니다.’를 5번 출력하는 코드를 반복문을 사용하지 않고 재귀함수로 정의해보자.</p></li>
+<li><p>재귀함수는</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">함수</span> <span class="pre">안에서</span> <span class="pre">자기</span> <span class="pre">자신을</span> <span class="pre">호출해야</span> <span class="pre">한다.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">더</span> <span class="pre">이상</span> <span class="pre">자기</span> <span class="pre">자신을</span> <span class="pre">호출하지</span> <span class="pre">않고</span> <span class="pre">리턴하는</span> <span class="pre">탈출구(유턴)가</span> <span class="pre">반드시</span> <span class="pre">있어야</span> <span class="pre">한다.</span></code></p></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+<li><p>아래 hello() 함수는 ‘반갑습니다.’를 5번 출력하는 코드를 재귀함수를 사용하여 작성한 코드이다.</p></li>
+<li><p>hello() 함수는 전달인자 <em>n</em>을 받아 ‘반갑습니다’를 출력하고 자기 자신 hello()을 다시 호출한다. 이때 hello() 함수 괄호안에 <em>n-1</em>을 전달인자로 전달한다.</p></li>
+<li><p>즉, 전달인자로 <em>n</em>을 받아 <em>n-1</em>을 전달하며, <em>n</em>은 재귀적으로 호출될 때마다 1씩 감소하여 전달된다. 그러다가 <em>n</em>이 0이되면 가장 마지막에 호출된 함수에서 탈출한다. <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">n==0:</span> <span class="pre">return</span></code> 코드가 유턴하는 탈출구인 것이다.</p></li>
+<li><p>함수에서 탈출하여 되돌아 오는 위치는 자신을 호출한 코드이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">:반갑습니다.&quot;</span><span class="p">)</span>
+        <span class="n">hello</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">hello</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5:반갑습니다.
+4:반갑습니다.
+3:반갑습니다.
+2:반갑습니다.
+1:반갑습니다.
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>재귀함수는 날아라 슈퍼보드의 손오공이 분신술을 쓰는 것이라고 생각할 수 있다. (날아라 슈퍼보드를 모르는 세대인가? ^^;;;;) 손오공이 자기와 똑같은 일을 하는 분신 손오공을 만들고, 자기의 일을 일부 떼서 분신에게 준다. 그러면 그 분신은 다시 분신 손오공을 만들고 자기의 일을 일부 떼서 분신에게 준다. 이 일이 계속 반복되다가 return을 만나면 분신술을 멈춘다.</p></li>
+<li><p>분신들은 자기가 한 일을 자기를 만든 분신 손오공에게 전달한다. 이렇게 다시 전달되어 오다가 (원조)손오공에게 까지 전달되면 프로그램이 끝난다.</p></li>
+</ul>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion0.png" style="width:400px;"></div><ul class="simple">
+<li><p>그림으로 살펴보자.</p></li>
+<li><p>hello(5) -&gt; hello(4) -&gt; hello(3) -&gt; hello(2) -&gt; hello(1) -&gt; hello(0) <strong>매개변수가 0이므로 return</strong>한다.</p></li>
+<li><p>hello(0)에서 return하면 어디로 돌아갈까?</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>hello(0)에서 return하면 바로 자신을 호출한 hello(1) 함수의 호출자(코드로 6번째 라인)에게 되돌아간다.</p></li>
+<li><p>hello(1) 다음에 더 이상의 코드가 없으므로(즉, <strong>함수의 끝이므로) hello(1)함수를 탈출한다.</strong></p></li>
+<li><p>hello(1)함수를 탈출하면 자신을 호출한 hello(2) 함수의 호출자(코드로 6번째 라인)에게 되돌아간다.</p></li>
+</ol>
+<ul class="simple">
+<li><p>이와 같이 계속 반복하여 hello(2) -&gt; hello(3) -&gt; hello(4) -&gt; hello(5)까지 되돌아온다.</p></li>
+</ul>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion1.png" style="width:600px;"></div><ul class="simple">
+<li><p>이번에는 코드를 약간 바꿔보자.</p></li>
+<li><p>재귀함수가 어떻게 동작하는지 이해를 도울 것이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hello</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">:반갑습니다.&quot;</span><span class="p">)</span>
+<span class="n">hello</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1:반갑습니다.
+2:반갑습니다.
+3:반갑습니다.
+4:반갑습니다.
+5:반갑습니다.
+</pre></div>
+</div>
+</div>
+</div>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion2.png" style="width:600px;"></div><div class="section" id="problem">
+<h3>Problem: 구구단<a class="headerlink" href="#problem" title="Permalink to this headline">#</a></h3>
+<p>😄 gugudan() 함수를 정의하고 재귀적인 방법으로 2단을 출력해보세요.</p>
+<hr class="docutils" />
+<p>Output Sample</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">=</span> <span class="mi">18</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="good-factorial">
+<h2>Good예) 팩토리얼(Factorial)<a class="headerlink" href="#good-factorial" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>재귀함수의 가장 대표적인 예로 활용되는 팩토리얼을 정의해보자.</p></li>
+<li><p>팩토리얼은 <em>n</em>이 하나의 자연수일 때, 1에서 <em>n</em>까지의 모든 자연수의 곱을 <em>n</em>에 상대하여 이르는 말로 *n!*로 읽는다.</p></li>
+<li><p>예를 들어, *5!*을 반복적인 형태(iterative form)으로 쓰면 <span class="math notranslate nohighlight">\( 5!= 5*4*3*2*1 \)</span> 이다.</p></li>
+<li><p>이를 수식으로 나타내면 아래와 같다.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Iterative form</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(n! = n\times (n-1)\times \cdots \times 1\)</span></p>
+<ul class="simple">
+<li><p>코드로 살펴보자.</p></li>
+<li><p>아래의 factorial_iterative(n) 함수는 반복문을 사용하여 팩토리얼을 구하는 코드이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorial_iterative</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">f</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">f</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">factorial_iterative</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>120
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>그러나 수학교과서에는 아래와 같이 재귀적인 형태(recursive form)로 정의되어 있다.</p></li>
+<li><p>재귀적인 형태로 표현하는 것을 선호하는 이유는 문제가 간단할 때에는 반복적인 형태로 정의해도 되지만, 문제가 조금만 복잡해지면 반복적인 형태로 정의하기에 어려운 순간이 오기 때문이다.</p></li>
+<li><p>재귀적인 형태는 아래와 같이 간단하게 정의할 수 있다.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Recursive form</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(n! = n \times (n-1)!~~~\)</span> if <span class="math notranslate nohighlight">\(n&gt;1\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(n!=1~~~\)</span> if <span class="math notranslate nohighlight">\(n=1\)</span>.</p>
+<ul class="simple">
+<li><p>아래의 factorial_recursive(n)은 재귀함수를 이용하여 팩토리얼을 구하는 코드이다.</p></li>
+<li><p>*n!*을 구하는 알고리즘이나 *(n-1)!*를 구하는 알고리즘이 동일하다.</p></li>
+<li><p>따라서 재귀적으로 구할 수 있다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorial_recursive</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial_recursive</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">factorial_recursive</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>120
+</pre></div>
+</div>
+</div>
+</div>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion3.png" style="width:500px;"></div></div>
+<div class="section" id="good">
+<h2>Good예) 재귀적으로 리스트의 합 구하기<a class="headerlink" href="#good" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>sum()함수는 iterable data를 전달인자로 주면 그 데이터들의 합을 반환한다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">sum</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>29
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>sum() 함수와 동일하게 동작하는 함수를 iterative하게 정의해보면 아래 sum_iterative(data) 함수와 같이 작성할 수 있다.</p></li>
+<li><p>여기서 전달인자는 리스트이므로 매개변수 data는 리스트를 받는다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sum_iterative</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">s</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sum_iterative</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>29
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>sum() 함수와 동일하게 동작하는 함수를 recursive하게 정의해보자.</p></li>
+<li><p>sum_recursive(data[1:])을 통해 리스트 [5,7,6,9,2]는</p>
+<ul>
+<li><p>sum_recursive([7,6,9,2])</p></li>
+<li><p>sum_recursive([6,9,2])</p></li>
+<li><p>sum_recursive([9,2])</p></li>
+<li><p>sum_recursive([2])</p></li>
+<li><p>sum_recursive([ ]) 와 같은 순서로 전달된다.</p></li>
+</ul>
+</li>
+<li><p>그리고 return 되는 값은</p>
+<ul>
+<li><p>sum_recursive([ ])에서 =&gt; 0</p></li>
+<li><p>sum_recursive([2])에서 2+0인 =&gt; 2</p></li>
+<li><p>sum_recursive([9,2])에서 9+2인 =&gt; 11</p></li>
+<li><p>sum_recursive([6,9,2])에서 6+11 =&gt; 17</p></li>
+<li><p>sum_recursive([7,6,9,2])에서 7+17 =&gt; 24</p></li>
+<li><p>sum_recursive([5,7,6,9,2])에서 5+24 =&gt; 29가 반환된다.</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sum_recursive</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum_recursive</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sum_recursive</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>29
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="spiral">
+<h3>spiral() 재귀함수 만들기<a class="headerlink" href="#spiral" title="Permalink to this headline">#</a></h3>
+<p>😄 spiral은 color가 red, blue, yellow, green, purple 색깔로 차례대로 변하면서 길이가 점점 1씩 작아지는 직선들의 연결한 것입니다. 직선의 최대값은 150입니다.
+spiral를 재귀함수로 만들어봅시다.</p>
+<ul class="simple">
+<li><p>ColabTurtle 모듈을 설치하세요.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>ColabTurtle
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;pip3&#39; is not recognized as an internal or external command,
+operable program or batch file.
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>ColabTurtle.Turtle을 import하고 tt라는 별칭으로 사용합니다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ColabTurtle.Turtle</span> <span class="k">as</span> <span class="nn">tt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">14</span><span class="o">-</span><span class="mi">7</span><span class="n">c6e58eb8b5b</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">ColabTurtle.Turtle</span> <span class="k">as</span> <span class="nn">tt</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;ColabTurtle&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>거북이가 그리는 펜의 색깔을 바꿀 때에는 tt.color()괄호안에 색깔을 적어줍니다.</p></li>
+<li><p>거북이가 앞으로 전진하게 하려면 tt.forward() 괄호안에 전진하려는 길이를 적어줍니다.</p></li>
+<li><p>거북이의 방향을 왼쪽으로 바꾸려면 tt.left() 괄호안에 각도를 적어줍니다. 오른쪽은 tt.right()입니다.</p></li>
+<li><p>아래에 예시코드가 있습니다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt</span><span class="o">.</span><span class="n">initializeTurtle</span><span class="p">(</span><span class="n">initial_speed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>spiral를 그리기 위한 재귀함수는 아래와 같습니다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">spiral</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">line_len</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">line_len</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">tt</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="n">colorList</span><span class="p">[</span><span class="n">line_len</span> <span class="o">%</span> <span class="n">n</span><span class="p">])</span> <span class="c1"># 펜 색 변경</span>
+    <span class="n">tt</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">line_len</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>	<span class="c1"># 선 그리기</span>
+    <span class="n">tt</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">360</span><span class="o">/</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 각도 변경</span>
+    <span class="n">spiral</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">line_len</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="n">tt</span><span class="o">.</span><span class="n">initializeTurtle</span><span class="p">(</span><span class="n">initial_speed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">colorList</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;purple&quot;</span><span class="p">]</span>  <span class="c1"># 색 리스트</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">bgcolor</span><span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">tt</span><span class="o">.</span><span class="n">back</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">spiral</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>반대로 직선이 점점 커지게 하기위해 코드를 수정해보세요.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Good예) 재귀적으로 문자열 카운트<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>재귀적으로 문자열을 찾아 개수 세기를 해보자.</p></li>
+<li><p>문자열.count(‘검색문자열’)은 문자열에서 ‘검색문자열’을 검색하여 개수를 반환하는 문자열 메서드이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sentence</span><span class="o">=</span><span class="s1">&#39;간장 공장 공장장은 강 공장장이고 된장 공장 공장장은 공 공장장이다.&#39;</span>
+<span class="n">sentence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;공장&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>문자열.count() 메서드와 같이 문자열을 검색하여 개수를 반환하는 함수를 정의해보자.</p></li>
+<li><p>물론 우리는 아직 클래스를 배우지 않았으므로 메서드를 정의하지는 못하지만, 함수는 recurive하게 정의해보면 아래와 같다.</p></li>
+<li><p>재귀함수를 호출하는 라인 9를 보면 count_recursive(sentence[1:], word )에서 변수 sentence[1:]와 같이 첫 글자를 빼고 전달인자로 넘겨준다.</p></li>
+<li><p>이 함수의 탈출 조건은 <code class="docutils literal notranslate"><span class="pre">len(sentence)&lt;len(word)</span></code>으로 문자열의 길이가 검색문자열의 길이보다 작을 때 return한다.</p></li>
+<li><p>결국 이 함수는 <code class="docutils literal notranslate"><span class="pre">문자열</span> <span class="pre">수</span> <span class="pre">-</span> <span class="pre">검색</span> <span class="pre">문자열+1</span></code> 수 만큼 재귀함수를 호출하게 된다.</p></li>
+<li><p>함수 안에서는 <code class="docutils literal notranslate"><span class="pre">sentence[:len(word)]==</span> <span class="pre">word</span></code>이면 변수 match를 1로 설정한다. 문자열이 같지 않다면 변수 match는 0을 갖고 있다.</p></li>
+<li><p>가장 깊은 레벨 함수로부터 match 값이 반환되어 온다.</p></li>
+<li><p>재귀함수의 모든 분신 함수는 지역변수 match를 갖고 있다는 것을 잊지말자.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">count_recursive</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">0</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">sentence</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span><span class="o">==</span><span class="n">word</span><span class="p">:</span>
+      <span class="n">match</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">match</span> <span class="o">+</span> <span class="n">count_recursive</span><span class="p">(</span> <span class="n">sentence</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">word</span><span class="p">)</span>
+
+<span class="n">count_recursive</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="s1">&#39;공장&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="info admonition">
+<p class="admonition-title">최대 재귀 깊이</p>
+<p>재귀함수를 호출하는 횟수에도 한도가 있다. 한도를 넘어가면 <code class="docutils literal notranslate"><span class="pre">RecursionError:</span> <span class="pre">maximum</span> <span class="pre">recursion</span> <span class="pre">depth</span> <span class="pre">exceeded</span> <span class="pre">while</span> <span class="pre">calling</span> <span class="pre">a</span> <span class="pre">Python</span> <span class="pre">object</span></code> 메시지가 나온다.</p>
+<p>최대 호출 깊이는 sys.getrecursionlimit()를 통해 확인할 수 있으며, 파이썬 버전과 OS에 따라 다르다. 코랩에서 확인해보니 기본값은 1000이다. 이 한도는 sys.setrecursionlimit(한도횟수)에 의해 조정가능하다.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getrecursionlimit</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getrecursionlimit</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="bad">
+<h2>Bad예) 피보나치 수열<a class="headerlink" href="#bad" title="Permalink to this headline">#</a></h2>
+<p>반복문을 통해서 풀었던 모든 코드를 재귀로 풀수 있을까? 만약 그렇다면 재귀로 푸는 것이 항상 더 좋을까? 답은 No!이다.  Case by Case 어떤 문제에 적용하느냐에 따라 다르다.
+단도직입적으로 말하면 재귀는 함부로 써서는 안된다.
+재귀를 썼을 때 문제를 단순화시켜서 좋을 때도 있지만 절대 재귀를 써서는 안되는 문제도 있다. 가장 전형적인 예가 바로 피보나치 수열이다.</p>
+<p><strong>피보나치</strong> 수열은 첫째 및 둘째 항이 1이며, 그 뒤의 모든 항은 바로 앞 두 항의 합인 수열이다. 즉, 1, 1, 2, 3, 5, 8, 13, ….이다. 편의상 0번째 항을 0으로 두기도 한다.
+피보나치 수열을 수식으로 세우면 아래와 같다.
+수식만 봤을 때에는 재귀로 작성하면 아주 적격인 모양새를 가지고 있다.</p>
+<p><span class="math notranslate nohighlight">\(F_0 = 0\)</span></p>
+<p><span class="math notranslate nohighlight">\(F_1 = 1\)</span></p>
+<p>…</p>
+<p><span class="math notranslate nohighlight">\(F_n = F_{n-1} + F_{n-2}\)</span></p>
+<ul class="simple">
+<li><p>피보나치 수열을 반복문을 사용하여 구현하면 다음과 같다.</p></li>
+<li><p>아래 fibonacci_iterative(n)함수에서 <code class="docutils literal notranslate"><span class="pre">curr,</span> <span class="pre">next</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">1</span></code> 는 curr = 0, next = 1을 저장한다는 의미이다.</p></li>
+<li><p>그런 후에, for 반복문에서 <code class="docutils literal notranslate"><span class="pre">curr,</span> <span class="pre">next</span> <span class="pre">=</span> <span class="pre">next,</span> <span class="pre">curr</span> <span class="pre">+</span> <span class="pre">next</span></code>를 통해 curr = next, next = curr+next를 반복한다. 즉 이전 next 값이 현재 curr가 되고, 이전 curr + 이전 next 값을 새로운 next값에  넣어준다.</p></li>
+<li><p>그림으로 나타내면 다음과 같다.</p></li>
+</ul>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion5.png" style="width:400px;"></div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibonacci_iterative</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">curr</span><span class="p">,</span> <span class="nb">next</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">curr</span><span class="p">,</span> <span class="nb">next</span> <span class="o">=</span> <span class="nb">next</span><span class="p">,</span> <span class="n">curr</span> <span class="o">+</span> <span class="nb">next</span>
+  <span class="k">return</span> <span class="n">curr</span>
+
+<span class="n">fibonacci_iterative</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">반복문 구문의 언더바(_)의 의미</p>
+<ul class="simple">
+<li><p>일반적으로는 <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">반복변수</span> <span class="pre">in</span> <span class="pre">iterable</span> <span class="pre">data:</span> </code>와 같이 for 다음에 반복변수를 만든다. 그리고 반복변수를 for문 실행문장에서 사용하는 경우가 많다.</p></li>
+<li><p>그런데, 반복문 for 다음에 언더바(_)로 반복변수를 넣으면 반복변수가 for문 실행문장에서 사용되지 않는다는 의미이다.</p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p>피보나치를 재귀로 정의하면 아래 코드와 같다.</p></li>
+<li><p>n이 0이면 0을 반환하고, n이 1이면 1를 반환한다. n이 0, 1이외에 다른 수이면 <code class="docutils literal notranslate"><span class="pre">fibonacci_recursive(n-1)</span> <span class="pre">+</span> <span class="pre">fibonacci_recursive(n-2)</span></code>를 호출한다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibonacci_recursive</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">0</span>
+  <span class="k">elif</span> <span class="n">n</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">fibonacci_recursive</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibonacci_recursive</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">fibonacci_recursive</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>피보나치 수열의 전달인자로 5를 주었다고 해보자.</p></li>
+<li><p>아래 그림과 같이, fib(5)는 fib(4)의 피보나치 수와 fib(3) 피보나치 수를 더하면 된다.</p></li>
+<li><p>fib(4)는 fib(3)과 fib(2)의 수를 더한다.</p></li>
+<li><p>fib(3)은 fib(2)와 fib(1)을 호출하고, fib(2)는 fib(1)과 fib(0)을 호출한다.</p></li>
+<li><p>아래 그림은 각각을 트리형태로 나타낸 것인데, 피보나치 함수가 호출되는 경로를 탐색해보면 <strong>깊이우선탐색</strong>(Depth First Search, DFS)방법과 동일하다.</p></li>
+<li><p>깊이우선탐색은 루트(혹은 다른 임의 지점)에서 시작해서 한 방향으로 갈 수 있을 때까지 계속 가다가 더 이상 갈 수 없게 되면 다시 가장 가까운 갈림길로 돌아와서 이곳으로부터 다른 방향으로 다시 탐색을 진행하는 방법이다.</p></li>
+</ul>
+<ul class="simple">
+<li><p>Visualization: <a class="reference external" href="https://observablehq.com/&#64;victormutai/visualizing-recursive-fibonacci-algorithm">https://observablehq.com/&#64;victormutai/visualizing-recursive-fibonacci-algorithm</a></p></li>
+</ul>
+<div align="center"><img src="https://haesunbyun.github.io/common/images/recursion4.png" style="width:500px;"></div><ul class="simple">
+<li><p>문제는 피보나치 수열을 재귀로 해결할 때 그림에서 알 수 있듯이 똑같은 전달인자를 주는 함수를 여러번 호출한다는 것이다.</p></li>
+<li><p>예를 들어, fib(5)로 시작했을 때</p>
+<ul>
+<li><p>fib(4)는 1번</p></li>
+<li><p>fib(3)은 2번</p></li>
+<li><p>fib(2)는 3번</p></li>
+<li><p>fib(1)는 5번</p></li>
+<li><p>fib(0)은 3번 호출한다.</p></li>
+</ul>
+</li>
+</ul>
+<p>즉, 피보나치 수를 계산할 때 <span class="math notranslate nohighlight">\(F_n = F_{n-1} + F_{n-2}\)</span>와 같은 정의는 계산하는 과정속으로 들어가면 중복해서 반복적으로 계산되는 양이 엄청나게 많다.
+숫자가 적을 때는 문제가 안되지만 숫자가 조금만 커져도 위 그래프 상에 있는 노드의 개수가 기하급수적으로 증가한다.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fibonacci_recursive</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="vs">
+<h2>반복 VS. 재귀 피보나치 수열 계산량 비교<a class="headerlink" href="#vs" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">fibonacci_iterative(n)의</span> <span class="pre">계산량</span> <span class="pre">vs.</span> <span class="pre">fibonacci_recursive(n)의</span> <span class="pre">계산량</span></code>을 비교해보자.</p>
+<ul class="simple">
+<li><p>일반적으로 계산량을 구하는 기본 단위는 연산 또는 명령문 등의 실행 횟수를 사용한다.</p></li>
+<li><p>예를 들어, fibonacci_iterative(n)에서는 대입연산 2번, 반복문에서 대입연산 <span class="math notranslate nohighlight">\(2n\)</span>번을 실행했다.</p></li>
+<li><p>따라서, 계산량은 <span class="math notranslate nohighlight">\( 2n+2 \)</span>인데, 이를 일반적으로 아래와 같이 표현한다.</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\( T(n) = 2n + 2 \)</span></p></li>
+<li><p>여기서 <span class="math notranslate nohighlight">\(T(n)\)</span>은 <span class="math notranslate nohighlight">\(n\)</span>개의 크기에 대해 <span class="math notranslate nohighlight">\( T(n) \)</span>의 시간이 소요된다는 의미로, 시간복잡도(Time complexity)를 계산할 때 이와 같이 표현한다.</p></li>
+</ul>
+</li>
+<li><p>따라서, fibonacci_iterative(n)의 시간복잡도 <span class="math notranslate nohighlight">\( T(n) = 2n + 2 \)</span> 이다.</p></li>
+<li><p>이를 알고리즘의 시간 복잡도를 나타내는 빅오표기법(Big-O notation )으로 표기해보자. 이때 최고차항을 제외한 나머지 모든 항과 모든 계수를 제거하고 남은 시간을 대문자 <span class="math notranslate nohighlight">\(O()\)</span> 괄호안에 넣어준다.</p></li>
+<li><p>따라서, fibonacci_iterative(n)의 시간복잡도를 빅오표기법으로 표기하면 <span class="math notranslate nohighlight">\(O(n)\)</span>이다. (Order of n이라고 읽는다.)</p></li>
+<li><p>fibonacci_iterative(n)은 n번째 피보나치 숫자를 계산하는 계산량은 n에 비례하게 증가한다.</p></li>
+<li><p>알고리즘의 복잡도(complexity)에 대해서는 추후에 자세히 다시 한번 다룰 것이다.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibonacci_iterative</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="n">curr</span><span class="p">,</span> <span class="nb">next</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>  <span class="c1"># 대입연산 1번</span>
+  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">curr</span><span class="p">,</span> <span class="nb">next</span> <span class="o">=</span> <span class="nb">next</span><span class="p">,</span> <span class="n">curr</span> <span class="o">+</span> <span class="nb">next</span> <span class="c1"># 대입연산 n번</span>
+  <span class="k">return</span> <span class="n">curr</span>
+
+<span class="n">fibonacci_iterative</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>그러나 fibonacci_recursive(n)에서는 중복되는 노드가 많으므로 그 계산량까지 구하면 <span class="math notranslate nohighlight">\(O(n)\)</span>이 아니라 기하급수적(exponential)으로 증가한다. n이 조금만 커져도 엄청난 시간이 걸린다.</p></li>
+<li><p>즉, 시간 복잡도는 함수가 한 번 호출되면 다시 두 번 호출되기 때문에 지수적으로 증가한다.</p></li>
+<li><p>그래서, <span class="math notranslate nohighlight">\(O(2^n)\)</span>이 된다.</p></li>
+<li><p>그래서  <span class="math notranslate nohighlight">\(F_n = F_{n-1} + F_{n-2}\)</span>와 같은 정의를 재귀로 사용하는 것은 좋은 선택이 아니다.</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>마무리<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>재귀함수는 함수에서 자기 자신을 다시 호출하는 함수를 말한다.</p></li>
+<li><p>재귀함수에는 더 이상 자기 자신을 호출하지 않고 리턴하는 탈출구(유턴)가 반드시 있어야 한다.</p></li>
+<li><p>재귀함수를 사용했을 때 사이즈가 크고 어려운 문제를 간단하게 해결할 수도 있지만 피보나치 수열과 같은 문제에 적용하면 더 비효율적일 수도 있다.</p></li>
+<li><p>재귀함수 주제에서 여러분에게 요구하는 핵심은 ‘재귀함수를 꼭 사용해라’가 아닌 동일한 문제를 푸는 방법에 대한 생각의 전환이다!</p></li>
 </ul>
 </div>
 </div>
@@ -465,6 +1071,32 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">재귀함수 정의와 호출</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem: 구구단</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#good-factorial">Good예) 팩토리얼(Factorial)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#good">Good예) 재귀적으로 리스트의 합 구하기</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spiral">spiral() 재귀함수 만들기</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Good예) 재귀적으로 문자열 카운트</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bad">Bad예) 피보나치 수열</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vs">반복 VS. 재귀 피보나치 수열 계산량 비교</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">마무리</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
